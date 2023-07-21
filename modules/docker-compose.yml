@@ -10,7 +10,7 @@ services:
       - FLASK_ENV=development
       - FLASK_APP=app.py
     env_file:
-     - ./api/.env
+     - ./api/.env # specify DB connection variables
     ports:
       - "5000:5000"
 
@@ -23,7 +23,7 @@ services:
       - node-modules:/frontend/node_modules
     environment:
       - NODE_ENV=development
-      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_API_URL=http://localhost:5000 # override .env variable for local dev
     ports:
       - '3000:3000'
     depends_on:
