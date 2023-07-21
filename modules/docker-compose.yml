@@ -1,0 +1,33 @@
+version: '3'
+name: udaconnect
+services:
+  api:
+    build: api
+    command: ["flask", "run", "--host=0.0.0.0"]
+    volumes:
+      - ./api:/backend
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+    env_file:
+     - ./api/.env
+    ports:
+      - "5000:5000"
+
+  frontend:
+    tty: true
+    build: frontend
+    command: ["npm", "start"]
+    volumes:
+      - ./frontend:/frontend
+      - node-modules:/frontend/node_modules
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:5000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+
+volumes:
+  node-modules:
