@@ -112,7 +112,15 @@ class LocationService:
 
     @staticmethod
     def retrieve_all() -> List[Location]:
-        return db.session.query(Location).all()  
+        locations: List[Location] = []
+        for (location, coord_text) in db.session.query(
+                Location, Location.coordinate.ST_AsText()
+            ).all():
+    
+            # Rely on database to return text form of point to reduce overhead of conversion in app code
+            location.wkt_shape = coord_text
+            locations.append(location)
+        return locations
 
 
 class PersonService:
